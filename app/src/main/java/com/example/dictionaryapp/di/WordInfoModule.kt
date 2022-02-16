@@ -2,6 +2,7 @@ package com.example.dictionaryapp.di
 
 import android.app.Application
 import androidx.room.Room
+import com.example.dictionaryapp.data.local.Converters
 import com.example.dictionaryapp.data.local.WordInfoDatabase
 import com.example.dictionaryapp.data.remote.DictionaryApi
 import com.example.dictionaryapp.data.repository.WordInfoRepositoryImpl
@@ -12,7 +13,6 @@ import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -40,11 +40,11 @@ class WordInfoModule {
     @Provides
     @Singleton
     fun provideWordInfoDatabase(
-        @ApplicationContext app: Application
+        app: Application
     ): WordInfoDatabase {
         return Room.databaseBuilder(
             app, WordInfoDatabase::class.java, "word_db"
-        ).addTypeConverter(GsonParser(Gson()))
+        ).addTypeConverter(Converters(GsonParser(Gson())))
             .build()
     }
 
